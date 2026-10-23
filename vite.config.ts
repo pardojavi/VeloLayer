@@ -32,8 +32,8 @@ export default defineConfig(({ mode }) => ({
               scope: base,
               display: 'standalone',
               orientation: 'portrait',
-              theme_color: '#0b1220',
-              background_color: '#0b1220',
+              theme_color: '#16a34a',
+              background_color: '#f3f6f4',
               categories: ['sports', 'travel', 'weather'],
               icons: [
                 { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },

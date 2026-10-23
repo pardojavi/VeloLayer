@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { fmtTime } from '../../domain/format'
 import { weatherCodeInfo } from '../../domain/forecast/weatherCodes'
 import type { AxisMode, PointWeather, RoutePlan } from '../../domain/types'
+import { useTheme } from '../../hooks/useTheme'
 
 export interface ChartsPanelProps {
   plan: RoutePlan
@@ -213,6 +214,7 @@ export default function ChartsPanel({
   onSelectIndex,
 }: ChartsPanelProps) {
   const timeAxis = plan.source === 'static' ? true : axisMode === 'time'
+  const theme = useTheme()
   const wrapperRef = useRef<HTMLDivElement>(null)
   const hostRefs = useRef<(HTMLDivElement | null)[]>([null, null, null, null])
   const plotsRef = useRef<(uPlot | null)[]>([null, null, null, null])
@@ -246,9 +248,20 @@ export default function ChartsPanel({
     if (width < 100) return
     const elevations = plan.points.map((p) => p.ele)
 
+    // Ejes y rejilla con los colores del tema activo (claro/noche): uPlot
+    // pinta en canvas y no lee las variables CSS.
+    const axisStroke = theme === 'dark' ? 'rgba(233,239,236,0.55)' : 'rgba(16,21,18,0.5)'
+    const gridStroke = theme === 'dark' ? 'rgba(233,239,236,0.08)' : 'rgba(16,21,18,0.07)'
+    const themedAxis = (a: uPlot.Axis): uPlot.Axis => ({
+      ...a,
+      stroke: a.stroke ?? axisStroke,
+      grid: a.grid ?? { stroke: gridStroke },
+      ticks: a.ticks ?? { stroke: gridStroke },
+    })
+
     const specs = CHART_SPECS.map((spec, i) => {
       const cols = i === 3 ? [elevations] : spec.getCols(weather)
-      const axes: uPlot.Axis[] = spec.axes ?? [{}, {}]
+      const axes: uPlot.Axis[] = (spec.axes ?? [{}, {}]).map(themedAxis)
       const xAxis = axes[0] ?? {}
       const opts: uPlot.Options = {
         width,
@@ -323,7 +336,7 @@ export default function ChartsPanel({
       plotsRef.current = [null, null, null, null]
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [plan, weather, timeAxis, width])
+  }, [plan, weather, timeAxis, width, theme])
 
   // Selección externa (mapa / panel de ropa) → cursor en las cuatro gráficas.
   useEffect(() => {

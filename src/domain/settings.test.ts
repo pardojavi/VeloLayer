@@ -79,3 +79,14 @@ describe('sanitizeSettings', () => {
     expect(ok.arrivalTime).toBe('17:45')
   })
 })
+
+describe('tema (claro/noche)', () => {
+  it('por defecto es claro', () => {
+    expect(createDefaultSettings(NOW).theme).toBe('light')
+  })
+
+  it('conserva el tema noche y descarta valores desconocidos', () => {
+    expect(sanitizeSettings({ theme: 'dark' }, NOW).theme).toBe('dark')
+    expect(sanitizeSettings({ theme: 'blue' }, NOW).theme).toBe('light')
+  })
+})

@@ -8,6 +8,10 @@ pasarás por cada punto y traduce el resultado en prendas concretas con su justi
 Sin cuentas, sin servidores propios: todo se calcula en el navegador y los datos viven en el
 dispositivo.
 
+Interfaz minimalista con **tema claro (blanco y verde) por defecto y modo noche (negro y verde)**,
+conmutable con el botón de la esquina superior o en *Ajustes → Apariencia*; la preferencia se
+guarda en el dispositivo como cualquier otra.
+
 ---
 
 ## Índice
@@ -198,7 +202,7 @@ public/              # Iconos PWA (192/512/maskable/apple-touch/favicon)
 ## Tests
 
 ```bash
-npm test          # 14 archivos, 102 pruebas (Vitest + jsdom + fake-indexeddb)
+npm test          # 14 archivos, 104 pruebas (Vitest + jsdom + fake-indexeddb)
 npm run test:watch
 ```
 

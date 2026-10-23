@@ -8,6 +8,7 @@ import type {
   GeoPoint,
   ResultTab,
   ThermalSensitivity,
+  ThemeMode,
   TrackRecord,
 } from './domain/types'
 import { errorMessage, useSettings } from './hooks/useSettings'
@@ -55,6 +56,22 @@ export default function App() {
     setResultTab(settings.lastResultTab === 'clothing' ? 'clothing' : 'summary')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready])
+
+  // Tema visual (claro/blanco-verde o noche/negro-verde).
+  const theme: ThemeMode = ready ? settings.theme : 'light'
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    // Espejo en localStorage para poder aplicarlo antes del primer pintado
+    // (lo lee index.html). La fuente de verdad sigue siendo IndexedDB.
+    try {
+      localStorage.setItem('velolayer-theme', theme)
+    } catch {
+      // Modos privados sin localStorage: no es crítico.
+    }
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', theme === 'dark' ? '#0a0d0c' : '#f3f6f4')
+  }, [theme])
 
   const handleCalculate = async () => {
     setPlanError(null)
@@ -106,6 +123,15 @@ export default function App() {
     <div className="app">
       {storageWarning ? <div className="banner warning">{storageWarning}</div> : null}
 
+      <button
+        type="button"
+        className="theme-quick"
+        aria-label={theme === 'dark' ? 'Cambiar al tema claro' : 'Cambiar al tema noche'}
+        onClick={() => update({ theme: theme === 'dark' ? 'light' : 'dark' })}
+      >
+        <ThemeIcon dark={theme === 'dark'} />
+      </button>
+
       <main className="app-main">
         {!ready ? (
           <div className="hint center loading">Cargando tus preferencias…</div>
@@ -143,7 +169,12 @@ export default function App() {
             onNewPlan={() => setView('plan')}
           />
         ) : (
-          <SettingsView settings={settings} onReset={reset} storageWarning={null} />
+          <SettingsView
+            settings={settings}
+            onReset={reset}
+            storageWarning={null}
+            onThemeChange={(t) => void update({ theme: t })}
+          />
         )}
 
         <footer className="app-footer">
@@ -193,5 +224,41 @@ export default function App() {
         </button>
       </nav>
     </div>
+  )
+}
+
+/** Icono del conmutador de tema: luna en tema claro, sol en tema noche. */
+function ThemeIcon({ dark }: { dark: boolean }) {
+  if (dark) {
+    return (
+      <svg
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="4.2" />
+        <path d="M12 2.6v2.2M12 19.2v2.2M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" />
+      </svg>
+    )
+  }
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M20.5 14.6A8.6 8.6 0 0 1 9.4 3.5a8.6 8.6 0 1 0 11.1 11.1z" />
+    </svg>
   )
 }

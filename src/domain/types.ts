@@ -32,6 +32,9 @@ export const SETTINGS_SCHEMA_VERSION = 1
  * Preferencias persistidas. Deben sobrevivir a cerrar la pestaña, el
  * navegador y reiniciar el dispositivo (IndexedDB local).
  */
+/** Tema visual: claro (blanco y verde) o noche (negro y verde). */
+export type ThemeMode = 'light' | 'dark'
+
 export interface Settings {
   schemaVersion: number
   planMode: PlanMode
@@ -55,6 +58,8 @@ export interface Settings {
   /** Velocidad estimada de descenso en km/h. */
   descentSpeedKmh: number
   sensitivity: ThermalSensitivity
+  /** Tema de la interfaz (persistido como preferencia). */
+  theme: ThemeMode
   lastTrackId: string | null
   lastAppView: AppView
   lastResultTab: ResultTab

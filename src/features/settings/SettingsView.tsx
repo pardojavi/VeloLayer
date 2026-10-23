@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fmtDuration, fmtKm } from '../../domain/format'
-import type { Settings, TrackRecord } from '../../domain/types'
+import type { Settings, ThemeMode, TrackRecord } from '../../domain/types'
 import { clearForecastCache } from '../../storage/forecastCacheRepository'
 import { listTracks, removeTrack } from '../../storage/tracksRepository'
 
@@ -8,11 +8,17 @@ export interface SettingsViewProps {
   settings: Settings
   onReset: () => Promise<void>
   storageWarning: string | null
+  onThemeChange: (theme: ThemeMode) => void
 }
 
 const UNITS_LINE = 'Unidades: km, km/h, °C y metros de desnivel.'
 
-export default function SettingsView({ settings, onReset, storageWarning }: SettingsViewProps) {
+export default function SettingsView({
+  settings,
+  onReset,
+  storageWarning,
+  onThemeChange,
+}: SettingsViewProps) {
   const [tracks, setTracks] = useState<TrackRecord[]>([])
   const [confirmReset, setConfirmReset] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
@@ -36,6 +42,30 @@ export default function SettingsView({ settings, onReset, storageWarning }: Sett
 
       {storageWarning ? <div className="banner warning">{storageWarning}</div> : null}
       {message ? <div className="banner info">{message}</div> : null}
+
+      <section className="card">
+        <h2>Apariencia</h2>
+        <div className="segmented" role="group" aria-label="Tema de la app">
+          <button
+            type="button"
+            className={settings.theme === 'light' ? 'active' : ''}
+            onClick={() => onThemeChange('light')}
+          >
+            Claro
+          </button>
+          <button
+            type="button"
+            className={settings.theme === 'dark' ? 'active' : ''}
+            onClick={() => onThemeChange('dark')}
+          >
+            Noche
+          </button>
+        </div>
+        <p className="hint">
+          Claro: blanco y verde. Noche: negro y verde. La preferencia se guarda en este
+          dispositivo.
+        </p>
+      </section>
 
       <section className="card">
         <h2>Tracks guardados</h2>

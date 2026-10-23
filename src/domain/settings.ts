@@ -30,6 +30,7 @@ export function createDefaultSettings(now: Date = new Date()): Settings {
     climbVamMph: 700,
     descentSpeedKmh: 35,
     sensitivity: 'normal',
+    theme: 'light',
     lastTrackId: null,
     lastAppView: 'plan',
     lastResultTab: 'summary',
@@ -110,6 +111,8 @@ export function sanitizeSettings(raw: unknown, now: Date = new Date()): Settings
 
   const axisMode = s.axisMode === 'km' || s.axisMode === 'time' ? s.axisMode : defaults.axisMode
 
+  const theme = s.theme === 'dark' ? 'dark' : 'light'
+
   let durationMin: number | null = null
   if (isFiniteNumber(s.durationMin) && s.durationMin > 0 && s.durationMin <= 24 * 60) {
     durationMin = Math.round(s.durationMin)
@@ -138,6 +141,7 @@ export function sanitizeSettings(raw: unknown, now: Date = new Date()): Settings
       ? s.descentSpeedKmh
       : defaults.descentSpeedKmh,
     sensitivity,
+    theme,
     lastTrackId: typeof s.lastTrackId === 'string' ? s.lastTrackId : null,
     lastAppView,
     lastResultTab,
