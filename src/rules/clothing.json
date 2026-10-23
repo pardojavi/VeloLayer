@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "sensitivityOffsetC": {
+    "friolero": 3,
+    "normal": 0,
+    "caluroso": -3
+  },
+  "catalog": {
+    "maillot_light": { "label": "Maillot ligero de manga corta", "group": "torso" },
+    "maillot_ss": { "label": "Maillot de manga corta", "group": "torso" },
+    "arm_warmer": { "label": "Manguitos", "group": "torso" },
+    "vest_optional": { "label": "Chaleco disponible", "group": "torso" },
+    "thermal_ls": { "label": "Maillot térmico de manga larga", "group": "torso" },
+    "wind_vest": { "label": "Chaleco cortavientos", "group": "torso" },
+    "base_layer": { "label": "Capa base", "group": "torso" },
+    "wind_jacket": { "label": "Chaqueta cortavientos o softshell", "group": "torso" },
+    "base_warm": { "label": "Capa base cálida", "group": "torso" },
+    "warm_jacket": { "label": "Chaqueta cortavientos", "group": "torso" },
+
+    "culotte_short": { "label": "Culotte corto", "group": "legs" },
+    "knee_warmers": { "label": "Bandas de rodilla disponibles", "group": "legs" },
+    "bib_tights": { "label": "Culote largo", "group": "legs" },
+    "leg_warmers": { "label": "Cubrepiernas", "group": "legs" },
+    "thermal_tights": { "label": "Piernas térmicas", "group": "legs" },
+
+    "gloves_short": { "label": "Guantes cortos", "group": "hands" },
+    "gloves_long": { "label": "Guantes largos", "group": "hands" },
+    "gloves_warm": { "label": "Guantes largos forrados", "group": "hands" },
+    "gloves_thermal": { "label": "Guantes térmicos", "group": "hands" },
+
+    "cap_vent": { "label": "Gorra ventilada bajo el casco", "group": "head" },
+    "cap": { "label": "Gorra bajo el casco", "group": "head" },
+    "buff_light": { "label": "Buff ligero", "group": "head" },
+    "helmet_liner": { "label": "Forro de casco o buff", "group": "head" },
+    "helmet_warm": { "label": "Forro de casco y buff", "group": "head" },
+    "balaclava": { "label": "Balaclava", "group": "head" },
+
+    "summer_shoes": { "label": "Zapatillas de verano", "group": "feet" },
+    "socks": { "label": "Medias de ciclismo", "group": "feet" },
+    "socks_long": { "label": "Medias largas", "group": "feet" },
+    "thermal_socks": { "label": "Medias térmicas", "group": "feet" },
+    "overshoe_light": { "label": "Cubrezapatillas ligeros", "group": "feet" },
+    "overshoes": { "label": "Cubrezapatillas", "group": "feet" },
+
+    "light_rain_shell": { "label": "Capa impermeable ligera", "group": "pocket" },
+    "rain_shell": { "label": "Chubasquero", "group": "pocket" },
+    "wind_pocket": { "label": "Chaleco cortavientos", "group": "pocket" },
+    "removable_layers": { "label": "Capas extraíbles", "group": "pocket" },
+    "extra_start": { "label": "Capa adicional para la salida", "group": "pocket" },
+    "sun_protection": { "label": "Protección solar (crema y gafas)", "group": "pocket" },
+    "lights": { "label": "Luces delantera y trasera", "group": "pocket" }
+  },
+  "bands": {
+    "torso": [
+      { "minC": 25, "items": ["maillot_light"] },
+      { "minC": 18, "items": ["maillot_ss"] },
+      { "minC": 12, "items": ["maillot_ss", "arm_warmer", "vest_optional"] },
+      { "minC": 7, "items": ["thermal_ls", "wind_vest"] },
+      { "minC": 2, "items": ["base_layer", "thermal_ls", "wind_jacket"] },
+      { "minC": -999, "items": ["base_warm", "thermal_ls", "warm_jacket"] }
+    ],
+    "legs": [
+      { "minC": 25, "items": ["culotte_short"] },
+      { "minC": 18, "items": ["culotte_short"] },
+      { "minC": 12, "items": ["culotte_short", "knee_warmers"] },
+      { "minC": 7, "items": ["bib_tights"] },
+      { "minC": 2, "items": ["bib_tights", "leg_warmers"] },
+      { "minC": -999, "items": ["thermal_tights"] }
+    ],
+    "hands": [
+      { "minC": 25, "items": [] },
+      { "minC": 18, "items": ["gloves_short"] },
+      { "minC": 12, "items": ["gloves_short"] },
+      { "minC": 7, "items": ["gloves_long"] },
+      { "minC": 2, "items": ["gloves_warm"] },
+      { "minC": -999, "items": ["gloves_thermal"] }
+    ],
+    "head": [
+      { "minC": 25, "items": ["cap_vent"] },
+      { "minC": 18, "items": ["cap"] },
+      { "minC": 12, "items": ["cap", "buff_light"] },
+      { "minC": 7, "items": ["helmet_liner"] },
+      { "minC": 2, "items": ["helmet_warm"] },
+      { "minC": -999, "items": ["balaclava"] }
+    ],
+    "feet": [
+      { "minC": 25, "items": ["summer_shoes"] },
+      { "minC": 18, "items": ["summer_shoes"] },
+      { "minC": 12, "items": ["socks"] },
+      { "minC": 7, "items": ["socks_long"] },
+      { "minC": 2, "items": ["thermal_socks", "overshoe_light"] },
+      { "minC": -999, "items": ["thermal_socks", "overshoes"] }
+    ]
+  },
+  "adjustments": {
+    "layerRangeC": 8,
+    "coldStartC": 4,
+    "coldStartWindowMin": 30,
+    "longDescentMinDropM": 150,
+    "longDescentMinMinutes": 10,
+    "rainPocketProbPct": 40,
+    "rainGearProbPct": 70,
+    "rainGearMmH": 1,
+    "heavyRainMmH": 4,
+    "gustWarningKmh": 40,
+    "headwindJacketKmh": 25,
+    "headwindJacketMinutes": 30,
+    "uvProtectIndex": 6,
+    "iceWarningC": 2
+  }
+}
