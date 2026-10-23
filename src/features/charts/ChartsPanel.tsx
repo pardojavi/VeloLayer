@@ -51,13 +51,13 @@ const CHART_SPECS: ChartSpec[] = [
       {
         label: 'Temperatura del aire',
         stroke: '#f59e0b',
-        width: 2,
+        width: 2.5,
         value: fmtNum(),
       },
       {
         label: 'Sensación en bici (estimada)',
         stroke: '#38bdf8',
-        width: 2,
+        width: 2.5,
         dash: [6, 4],
         value: fmtNum(),
       },
@@ -77,9 +77,9 @@ const CHART_SPECS: ChartSpec[] = [
     ],
     series: [
       { label: 'Hora' },
-      { label: 'Viento', stroke: '#22d3ee', width: 2, value: fmtNum() },
-      { label: 'Rachas', stroke: '#a78bfa', width: 1.5, dash: [5, 4], value: fmtNum() },
-      { label: 'Componente frente/cola', stroke: '#f97316', width: 2, value: fmtNum() },
+      { label: 'Viento', stroke: '#22d3ee', width: 2.5, value: fmtNum() },
+      { label: 'Rachas', stroke: '#a78bfa', width: 2, dash: [5, 4], value: fmtNum() },
+      { label: 'Componente frente/cola', stroke: '#f97316', width: 2.5, value: fmtNum() },
     ],
   },
   {
@@ -94,8 +94,8 @@ const CHART_SPECS: ChartSpec[] = [
       {
         label: 'Precipitación',
         stroke: '#3b82f6',
-        fill: 'rgba(59,130,246,0.55)',
-        paths: uPlot.paths.bars?.({ size: [0.7, 24] }),
+        fill: 'rgba(59,130,246,0.75)',
+        paths: uPlot.paths.bars?.({ size: [0.6, 24] }),
         scale: 'mm',
         value: fmtNum(),
       },
@@ -129,8 +129,8 @@ const CHART_SPECS: ChartSpec[] = [
       {
         label: 'Altitud',
         stroke: '#34d399',
-        fill: 'rgba(52,211,153,0.18)',
-        width: 2,
+        fill: 'rgba(52,211,153,0.3)',
+        width: 2.5,
         value: fmtNum(0),
       },
     ],
@@ -248,6 +248,24 @@ export default function ChartsPanel({
     if (width < 100) return
     const elevations = plan.points.map((p) => p.ele)
 
+    // Rellenos con degradado vertical (aspecto moderno); uPlot admite
+    // CanvasGradient en `fill`. Se crea un contexto auxiliar para generarlo.
+    const gradCtx = document.createElement('canvas').getContext('2d')
+    const gradient = (top: string, bottom: string): string | CanvasGradient => {
+      if (!gradCtx) return top
+      const g = gradCtx.createLinearGradient(0, 0, 0, CHART_H)
+      g.addColorStop(0, top)
+      g.addColorStop(1, bottom)
+      return g
+    }
+    const FILL_FACTORIES: Record<string, () => string | CanvasGradient> = {
+      'Temperatura del aire': () => gradient('rgba(245,158,11,0.30)', 'rgba(245,158,11,0.02)'),
+      'Sensación en bici (estimada)': () => gradient('rgba(56,189,248,0.26)', 'rgba(56,189,248,0.02)'),
+      Viento: () => gradient('rgba(34,211,238,0.26)', 'rgba(34,211,238,0.02)'),
+      'Componente frente/cola': () => gradient('rgba(249,115,22,0.24)', 'rgba(249,115,22,0.02)'),
+      Altitud: () => gradient('rgba(52,211,153,0.45)', 'rgba(52,211,153,0.03)'),
+    }
+
     // Ejes y rejilla con los colores del tema activo (claro/noche): uPlot
     // pinta en canvas y no lee las variables CSS.
     const axisStroke = theme === 'dark' ? 'rgba(233,239,236,0.55)' : 'rgba(16,21,18,0.5)'
@@ -263,6 +281,11 @@ export default function ChartsPanel({
       const cols = i === 3 ? [elevations] : spec.getCols(weather)
       const axes: uPlot.Axis[] = (spec.axes ?? [{}, {}]).map(themedAxis)
       const xAxis = axes[0] ?? {}
+      const series = spec.series.map((s): uPlot.Series => {
+        const key = typeof s.label === 'string' ? s.label : ''
+        const make = FILL_FACTORIES[key]
+        return make ? { ...s, fill: make() } : s
+      })
       const opts: uPlot.Options = {
         width,
         height: CHART_H,
@@ -281,7 +304,7 @@ export default function ChartsPanel({
           timeAxis ? xAxis : { ...xAxis, label: 'km' },
           ...axes.slice(1),
         ],
-        series: spec.series,
+        series,
         hooks: {
           setCursor: [
             (u) => {

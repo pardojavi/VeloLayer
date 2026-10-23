@@ -123,14 +123,17 @@ export default function App() {
     <div className="app">
       {storageWarning ? <div className="banner warning">{storageWarning}</div> : null}
 
-      <button
-        type="button"
-        className="theme-quick"
-        aria-label={theme === 'dark' ? 'Cambiar al tema claro' : 'Cambiar al tema noche'}
-        onClick={() => update({ theme: theme === 'dark' ? 'light' : 'dark' })}
-      >
-        <ThemeIcon dark={theme === 'dark'} />
-      </button>
+      <header className="app-topbar">
+        <span className="brand">VeloLayer</span>
+        <button
+          type="button"
+          className="icon-btn"
+          aria-label={theme === 'dark' ? 'Cambiar al tema claro' : 'Cambiar al tema noche'}
+          onClick={() => update({ theme: theme === 'dark' ? 'light' : 'dark' })}
+        >
+          <ThemeIcon dark={theme === 'dark'} />
+        </button>
+      </header>
 
       <main className="app-main">
         {!ready ? (

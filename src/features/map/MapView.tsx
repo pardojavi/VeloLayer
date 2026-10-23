@@ -78,10 +78,17 @@ export default function MapView({
     if (!map || !layer) return
     layer.clearLayers()
 
+    // Contorno ancho bajo toda la ruta: la línea de color destaca sobre
+    // cualquier tesela (y sobre el modo noche).
+    const routeLatLngs = plan.points.map((p) => [p.lat, p.lon] as [number, number])
+    if (routeLatLngs.length >= 2) {
+      L.polyline(routeLatLngs, { className: 'route-casing', weight: 12 }).addTo(layer)
+    }
+
     if (plan.geometry.length >= 2) {
       L.polyline(
         plan.geometry.map((p) => [p.lat, p.lon] as [number, number]),
-        { color: '#e2e8f0', weight: 7, opacity: 0.85 },
+        { className: 'route-base', weight: 6, opacity: 0.9 },
       ).addTo(layer)
     }
 
@@ -96,7 +103,7 @@ export default function MapView({
           [a.lat, a.lon],
           [b.lat, b.lon],
         ],
-        { color: segmentColor(colorMode, w), weight: 4, opacity: 1 },
+        { className: 'route-seg', color: segmentColor(colorMode, w), weight: 6, opacity: 1 },
       ).addTo(layer)
     }
 
@@ -118,6 +125,7 @@ export default function MapView({
         weight: 3,
         fillColor: '#0f172a',
         fillOpacity: 1,
+        className: 'route-marker',
       }).addTo(map)
     } else {
       markerRef.current.setLatLng([p.lat, p.lon])
